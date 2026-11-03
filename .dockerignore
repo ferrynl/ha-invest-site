@@ -2,3 +2,4 @@
 !Dockerfile
 !dist/
 !dist/**
+!demo_server.py
