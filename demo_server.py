@@ -48,6 +48,11 @@ class PublicDemo(Handler):
 
     def do_POST(self):
         self.close_connection = True
+        if urlsplit(self.path).path == "/app/api/account/language":
+            self.discard_demo_body()
+            # The app saves the choice in the browser after this acknowledgement.
+            # Never forward this request to the shared demo database.
+            return self.respond({"ok": True})
         return self.respond({"error": "The public demo is read-only."}, 405)
 
 
