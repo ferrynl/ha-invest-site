@@ -5,7 +5,7 @@ from http.server import ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
-from demo import DEMO_READS, ensure_demo
+import demo
 from server import Handler, store
 
 site = Path(os.environ.get("SITE_DIR", "/site"))
@@ -13,7 +13,7 @@ pages = {"/" + file.name: file for file in site.glob("*.html")}
 pages["/"] = site / "index.html"
 pages.update({"/assets/" + file.name: file for file in (site / "assets").iterdir() if file.is_file()})
 
-demo_api = DEMO_READS | {"/api/session", "/api/account/dashboard", "/api/fx", "/api/reports/charges", "/api/instrument/company"}
+demo_api = demo.DEMO_READS | {"/api/session", "/api/account/dashboard", "/api/fx", "/api/reports/charges", "/api/instrument/company"}
 asset_suffixes = (".js", ".css", ".ttf", ".json", ".svg", ".png")
 
 
@@ -57,5 +57,11 @@ class PublicDemo(Handler):
 
 
 if __name__ == "__main__":
-    ensure_demo(store.root / "demo")
+    # Keep three currencies and two years of history with a smaller public dataset.
+    demo.MARKETS = [
+        (currency, exchange, country, rate, ";".join(listings.split(";")[:4]))
+        for currency, exchange, country, rate, listings in demo.MARKETS[:3]
+    ]
+    demo.SEED_VERSION = "public-12-v1"
+    demo.ensure_demo(store.root / "demo")
     ThreadingHTTPServer(("0.0.0.0", int(os.environ.get("PORT", "80"))), PublicDemo).serve_forever()
