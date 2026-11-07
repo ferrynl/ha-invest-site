@@ -7,7 +7,7 @@ repo = "https://github.com/ferrynl/ha-invest"
 copy = {
 "nl": {
 "nav": ["Functies","Demo","Schermafbeeldingen","Installatie"],
-"badge":"Gratis · Open source · Lokaal",
+"badge":"Gratis / Open source / Lokaal",
 "title":"Jouw beleggingen.<br>Jouw data.",
 "intro":"Volg je portefeuille, rendement en dividend over meerdere brokers vanuit Home Assistant. Home Invest is gratis en bewaart je gegevens op je eigen installatie.",
 "full":"De volledige app bevat een alleen-lezen demo met 10 brokers, 150 aandelen en 10 valuta’s. Open Mijn account → Profiel kiezen → Demo. Zonder account vind je de keuze in het taalvenster.",
@@ -18,7 +18,7 @@ copy = {
 },
 "en": {
 "nav":["Features","Demo","Screenshots","Installation"],
-"badge":"Free · Open source · Local",
+"badge":"Free / Open source / Local",
 "title":"Your investments.<br>Your data.",
 "intro":"Track your portfolio, returns and dividends across brokers from Home Assistant. Home Invest is free and stores your data on your own installation.",
 "full":"The full app includes a read-only demo with 10 brokers, 150 stocks and 10 currencies. Open My account → Choose profile → Demo. Without an account, use the language dialog.",
@@ -29,7 +29,7 @@ copy = {
 },
 "es": {
 "nav":["Funciones","Demo","Capturas","Instalación"],
-"badge":"Gratis · Código abierto · Local",
+"badge":"Gratis / Código abierto / Local",
 "title":"Tus inversiones.<br>Tus datos.",
 "intro":"Sigue tu cartera, rentabilidad y dividendos de varios brókeres desde Home Assistant. Home Invest es gratis y guarda los datos en tu propia instalación.",
 "full":"La aplicación completa incluye una demo de solo lectura con 10 brókeres, 150 acciones y 10 divisas. Abre Mi cuenta → Elegir perfil → Demo. Sin cuenta, usa el selector de idioma.",
@@ -45,20 +45,21 @@ pages = {"nl":"index.html","en":"en.html","es":"es.html"}
 for lang, t in copy.items():
     f, d, s, i = t["nav"]
     nav = "".join(f'<a href="{key}-{lang}.html">{label}</a>' for key, label in zip(ids, t["nav"]))
-    languages = " · ".join(f'<a href="{page}" data-language="{key}" hreflang="{key}" lang="{key}"{" aria-current=page" if key == lang else ""}>{key.upper()}</a>' for key, page in pages.items())
+    languages = " / ".join(f'<a href="{page}" data-language="{key}" hreflang="{key}" lang="{key}"{" aria-current=page" if key == lang else ""}>{key.upper()}</a>' for key, page in pages.items())
     features = "".join(f'<article class="card"><h3>{name}</h3><p>{desc}</p></article>' for name, desc in t["features"])
     screenshots = "".join(f'<figure><a href="assets/{file}"><img loading="lazy" src="assets/{file}" alt="{escape(caption)}"></a><figcaption>{caption}</figcaption></figure>' for file, caption in zip(files, t["screens"]))
+    screenshots = screenshots.replace('loading="lazy"', 'fetchpriority="high"', 1)
     steps = "".join(f'<li>{step}</li>' for step in t["steps"])
     page = f"""<!doctype html>
 <html lang="{lang}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Home Invest · {t['badge']}</title><meta name="description" content="{escape(t['intro'])}">
+<title>Home Invest / {t['badge']}</title><meta name="description" content="{escape(t['intro'])}">
 <link rel="stylesheet" href="assets/site.css">
-<header><a class="brand" href="{pages[lang]}"><span>◈</span> Home Invest</a><nav>{nav}</nav><div>{languages}</div></header>
-<main><section class="hero"><p class="eyebrow">{t['badge']}</p><h1>{t['title']}</h1><p>{t['intro']}</p><div class="actions"><a class="button" href="install-{lang}.html">{i} →</a><a href="demo-{lang}.html">{d} ↗</a></div></section>
+<header><a class="brand" href="{pages[lang]}"><span aria-hidden="true">HI</span> Home Invest</a><nav>{nav}</nav><div>{languages}</div></header>
+<main><section class="hero"><p class="caption">{t['badge']}</p><h1>{t['title']}</h1><p>{t['intro']}</p><div class="actions"><a class="button" href="install-{lang}.html">{i}</a><a href="demo-{lang}.html">{d}</a></div></section>
 <section id="demo"></section>
-<section id="features"><p class="eyebrow">02 / Home Invest</p><h2>{f}</h2><p>{t['privacy']}</p><div class="grid">{features}</div></section>
-<section id="screens"><p class="eyebrow">03 / Home Invest</p><h2>{s}</h2><div class="grid">{screenshots}</div></section>
-<section id="install"><p class="eyebrow">04 / Home Assistant</p><h2>{i}</h2><div class="card"><ol>{steps}</ol><p><code>{repo}</code></p><div class="actions"><a class="button" href="{repo}">{t['source']}</a><a href="{repo}/blob/main/portfolio/DOCS.md">{t['docs']}</a></div></div></section></main>
+<section id="features"><p class="caption">02 / Home Invest</p><h2>{f}</h2><p>{t['privacy']}</p><div class="grid">{features}</div></section>
+<section id="screens"><p class="caption">03 / Home Invest</p><h2>{s}</h2><div class="grid">{screenshots}</div></section>
+<section id="install"><p class="caption">04 / Home Assistant</p><h2>{i}</h2><div class="card"><ol>{steps}</ol><p><code>{repo}</code></p><div class="actions"><a class="button" href="{repo}">{t['source']}</a><a href="{repo}/blob/main/portfolio/DOCS.md">{t['docs']}</a></div></div></section></main>
 <footer><strong>Home Invest</strong><p>{t['badge']}</p><nav>{nav}</nav></footer></html>
 """
 
@@ -66,7 +67,7 @@ for lang, t in copy.items():
     sections = dict(re.findall(r'<section id="([^"]+)">(.*?)</section>', page, re.S))
     hero = page.split("<main>", 1)[1].split("</section>", 1)[0] + "</section>"
     tiles = "".join(
-        f'<a class="card tile" href="{key}-{lang}.html"><span class="eyebrow">0{index}</span><h3>{label} <span>↗</span></h3></a>'
+        f'<a class="card tile" href="{key}-{lang}.html"><span class="caption">0{index}</span><h3>{label} </h3></a>'
         for index, (key, label) in enumerate(zip(ids, t["nav"]), 1)
     )
     tour = {
@@ -77,9 +78,14 @@ for lang, t in copy.items():
     launch, title, intro, notice, tasks = tour[lang]
     demo_url = "/app/?profile=demo#home"
     instructions = "".join(f"<li>{task}</li>" for task in tasks)
-    sections["demo"] = f'<p class="eyebrow">LIVE / HOME INVEST</p><h2>{title}</h2><p>{intro}</p><p>{notice}</p><a class="button" href="{demo_url}">{launch} ↗</a><div class="card walkthrough"><ol>{instructions}</ol><p>{t["full"]}</p></div>'
-    hero = hero.replace(f'{d} ↗', f'{launch} ↗').replace(f'href="demo-{lang}.html"', f'href="{demo_url}"')
-    hero = hero.replace("</section>", '<div class="hero-line" aria-hidden="true"><svg viewBox="0 0 500 110"><path d="M0 99 L50 94 L93 99 L136 70 L179 77 L224 55 L273 64 L321 35 L370 43 L423 19 L470 25 L500 4"/></svg></div></section>')
+    sections["demo"] = f'<p class="caption">LIVE / HOME INVEST</p><h2>{title}</h2><p>{intro}</p><p>{notice}</p><a class="button" href="{demo_url}">{launch}</a><div class="card walkthrough"><ol>{instructions}</ol><p>{t["full"]}</p></div>'
+    hero_intro = {
+        "nl": "Volg je portefeuille, rendement en dividend lokaal in Home Assistant.",
+        "en": "Track your portfolio, returns and dividends locally in Home Assistant.",
+        "es": "Sigue tu cartera, rentabilidad y dividendos localmente en Home Assistant.",
+    }
+    hero = hero.replace(t["intro"], hero_intro[lang])
+    hero = hero.replace(f'{d}', f'{launch}').replace(f'href="demo-{lang}.html"', f'href="{demo_url}"')
     preview = f'<a class="showcase" href="screens-{lang}.html"><img src="assets/rapporten-preview.png" alt="{t["screens"][0]}"></a>'
     journey = {
         "nl": ("Van brokerbestand naar portefeuilleoverzicht", [("01", "Importeer je historie", "Maak per broker een rekening aan. Bekijk het importvoorbeeld en controleer instrumenten en kosten voordat je de boekingen opslaat."), ("02", "Onderzoek je posities", "Filter het dashboard op broker en valuta. Open een aandeel om koershistorie en gebeurtenissen per positie te zien."), ("03", "Volg je resultaat", "Bekijk rendement, ontvangen dividend, kosten en belastingen in de rapporten. Bewaar een lokale back-up voor herstel.")]),
@@ -87,15 +93,15 @@ for lang, t in copy.items():
         "es": ("De la exportación del bróker al resumen de cartera", [("01", "Importa tu historial", "Crea una cuenta por bróker. Revisa la vista previa y comprueba los instrumentos y comisiones antes de guardar las operaciones."), ("02", "Explora tus posiciones", "Filtra el panel por bróker y divisa. Abre una acción para ver su historial de precios y sus operaciones."), ("03", "Sigue tus resultados", "Consulta rentabilidad, dividendos recibidos, comisiones e impuestos en Informes. Guarda una copia local para poder restaurarla.")]),
     }
     journey_title, journey_steps = journey[lang]
-    journey_cards = "".join(f'<article class="card"><span class="eyebrow">{number}</span><h3>{heading}</h3><p>{description}</p></article>' for number, heading, description in journey_steps)
+    journey_cards = "".join(f'<article class="card"><span class="caption">{number}</span><h3>{heading}</h3><p>{description}</p></article>' for number, heading, description in journey_steps)
     workflow = f'<div class="workflow"><h2>{journey_title}</h2><div class="grid">{journey_cards}</div></div>'
-    sections["features"] += workflow
-    landing = hero + preview + workflow + f'<section class="grid overview">{tiles}</section><section class="home-details"><h2>{f}</h2><p>{t["privacy"]}</p><div class="grid">{features}</div></section>'
+    sections["features"] = sections["features"].replace("<h3>", '<h2 class="feature-heading">').replace("</h3>", "</h2>") + workflow
+    landing = f'<div class="stage">{hero}{preview}</div>' + workflow + f'<section class="grid overview">{tiles}</section><section class="home-details"><h2>{f}</h2><p>{t["intro"]}</p><p>{t["privacy"]}</p><div class="grid">{features}</div></section>'
     head, body = page.split("<main>", 1)
     footer = body.split("</main>", 1)[1]
     (root / pages[lang]).write_text(head + "<main>" + landing + "</main>" + footer, encoding="utf-8")
     for key, label in zip(ids, t["nav"]):
-        detail_head = head.replace(f"<title>Home Invest · {t['badge']}</title>", f"<title>{label} · Home Invest</title>")
+        detail_head = head.replace(f"<title>Home Invest / {t['badge']}</title>", f"<title>{label} / Home Invest</title>")
         for target in pages:
             detail_head = detail_head.replace(
                 f'href="{pages[target]}" data-language="{target}"',
