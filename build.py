@@ -59,7 +59,7 @@ for lang, t in copy.items():
 <section id="demo"></section>
 <section id="features"><p class="caption">02 / Home Invest</p><h2>{f}</h2><p>{t['privacy']}</p><div class="grid">{features}</div></section>
 <section id="screens"><p class="caption">03 / Home Invest</p><h2>{s}</h2><div class="grid">{screenshots}</div></section>
-<section id="install"><p class="caption">04 / Home Assistant</p><h2>{i}</h2><div class="card"><ol>{steps}</ol><p><code>{repo}</code></p><div class="actions"><a class="button" href="{repo}">{t['source']}</a><a href="{repo}/blob/main/portfolio/DOCS.md">{t['docs']}</a></div></div></section></main>
+<section id="install"><p class="caption">04 / Home Assistant</p><h2>{i}</h2><div class="card"><ol>{steps}</ol><p><code>https://github.com/ferrynl/ha-apps</code></p><div class="actions"><a class="button" href="{repo}">{t['source']}</a><a href="{repo}/blob/main/portfolio/DOCS.md">{t['docs']}</a></div></div></section></main>
 <footer><strong>Home Invest</strong><p>{t['badge']}</p><nav>{nav}</nav></footer></html>
 """
 
